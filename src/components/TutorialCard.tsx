@@ -21,7 +21,7 @@ export const TutorialCard: React.FC = () => {
     <div id="tutorial-card-root" className="bg-black/60 border border-emerald-500/20 rounded-2xl p-5 shadow-lg transition-all font-mono">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between text-left focus:outline-none"
+        className="w-full flex items-center justify-between text-left focus:outline-none touch-manipulation py-1 sm:py-0"
       >
         <div className="flex items-center gap-2.5">
           <div className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_8px_rgba(16,185,129,0.1)]">

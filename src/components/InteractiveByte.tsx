@@ -102,14 +102,14 @@ export const InteractiveByte: React.FC<InteractiveByteProps> = ({
       </div>
 
       {/* Grid of 8 Switches representing individual bits */}
-      <div className="grid grid-cols-4 sm:grid-cols-8 gap-2.5 mb-6">
+      <div className="grid grid-cols-4 sm:grid-cols-8 gap-3 sm:gap-2.5 mb-6">
         {bits.map((isOn, index) => {
           const powerValue = posValues[index];
           return (
             <div
               key={index}
               id={`bit-container-${index}`}
-              className={`flex flex-col items-center p-2 rounded-xl transition-all border ${
+              className={`flex flex-col items-center p-2 sm:p-2 rounded-xl transition-all border ${
                 isOn
                   ? 'bg-emerald-950/25 border-emerald-500/40 shadow-[0_0_10px_rgba(16,185,129,0.05)]'
                   : 'bg-black/35 border-emerald-500/5'
@@ -128,14 +128,14 @@ export const InteractiveByte: React.FC<InteractiveByteProps> = ({
               <button
                 id={`bit-toggle-${index}`}
                 onClick={() => handleBitToggle(index)}
-                className={`w-full py-2.5 px-1 rounded-lg flex flex-col items-center justify-center gap-1 transition-all outline-none focus:ring-1 focus:ring-emerald-500 ${
+                className={`w-full py-4 sm:py-2.5 px-1 rounded-lg flex flex-col items-center justify-center gap-1 transition-all outline-none focus:ring-2 focus:ring-emerald-500/50 touch-manipulation active:scale-95 ${
                   isOn
                     ? 'bg-emerald-500 text-slate-950 shadow-[0_0_12px_rgba(16,185,129,0.4)] font-bold scale-[1.02]'
                     : 'bg-slate-900 border border-emerald-500/5 hover:border-emerald-500/25 text-slate-400'
                 }`}
               >
-                <span className="text-sm font-mono">{isOn ? '1' : '0'}</span>
-                <span className="text-[8px] uppercase tracking-wider opacity-60 font-mono">
+                <span className="text-base sm:text-sm font-mono">{isOn ? '1' : '0'}</span>
+                <span className="text-[9px] sm:text-[8px] uppercase tracking-wider opacity-60 font-mono">
                   {isOn ? 'on' : 'off'}
                 </span>
               </button>

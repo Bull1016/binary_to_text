@@ -6,3 +6,139 @@
   --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
+
+/* Driver.js Custom Theme */
+.driverjs-theme {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5), 0 0 20px rgba(16, 185, 129, 0.1) !important;
+  padding: 16px !important;
+  max-width: 300px !important;
+}
+
+.driverjs-theme .driver-popover-title {
+  font-family: "JetBrains Mono", monospace !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #10b981 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  margin-bottom: 8px !important;
+}
+
+.driverjs-theme .driver-popover-description {
+  font-family: "JetBrains Mono", monospace !important;
+  font-size: 12px !important;
+  line-height: 1.6 !important;
+  color: #cbd5e1 !important;
+}
+
+.driverjs-theme .driver-popover-progress-text {
+  font-family: "JetBrains Mono", monospace !important;
+  font-size: 10px !important;
+  color: #64748b !important;
+}
+
+.driverjs-theme .driver-popover-arrow {
+  border-color: #0f172a !important;
+}
+
+.driverjs-theme .driver-popover-footer {
+  margin-top: 12px !important;
+  display: flex !important;
+  gap: 8px !important;
+}
+
+.driverjs-theme .driver-popover-btn {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border: 1px solid rgba(16, 185, 129, 0.2) !important;
+  font-family: "JetBrains Mono", monospace !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  padding: 10px 16px !important;
+  border-radius: 6px !important;
+  text-shadow: none !important;
+  transition: all 0.2s !important;
+  cursor: pointer !important;
+  min-width: 80px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  touch-action: manipulation !important;
+}
+
+@media (min-width: 768px) {
+  .driverjs-theme .driver-popover-btn {
+    padding: 6px 12px !important;
+    font-size: 10px !important;
+    min-width: auto !important;
+  }
+}
+
+.driverjs-theme .driver-popover-btn:hover {
+  background-color: rgba(16, 185, 129, 0.1) !important;
+  border-color: #10b981 !important;
+  color: #10b981 !important;
+}
+
+.driverjs-theme .driver-popover-next-btn {
+  background-color: #10b981 !important;
+  color: #020617 !important;
+  border-color: #10b981 !important;
+}
+
+.driverjs-theme .driver-popover-next-btn:hover {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+  color: #020617 !important;
+}
+
+.driverjs-theme .driver-popover-prev-btn {
+  /* Secondary style already handled by general .driver-popover-btn */
+}
+
+.driverjs-theme .driver-popover-close-btn {
+  color: #64748b !important;
+}
+
+.driverjs-theme .driver-popover-close-btn:hover {
+  color: #f8fafc !important;
+}
+
+/* Ensure driver.js overlay doesn't block interactions if needed,
+   but driver.js usually handles this with the stage.
+   The 'Next' button unresponsiveness might be due to z-index. */
+.driver-popover {
+  z-index: 1000000000 !important;
+}
+
+.driver-stage {
+  z-index: 999999999 !important;
+}
+
+.driver-overlay {
+  z-index: 999999998 !important;
+}
+
+/* Fix for mobile scroll issues */
+body.driver-active {
+  overflow: hidden !important;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Ensure the highlighted element is not dimmed too much and stays visible */
+.driver-active-element {
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.3) !important;
+  transition: box-shadow 0.2s ease !important;
+}

@@ -199,7 +199,7 @@ export default function App() {
             <div className="grid grid-cols-2 gap-1.5 bg-slate-950/80 p-1 rounded-xl border border-emerald-500/10">
               <button
                 onClick={() => { if (mode !== 'TEXT_TO_BINARY') toggleMode(); }}
-                className={`flex items-center justify-center gap-2 px-4 py-2 text-xs font-mono tracking-wider uppercase rounded-lg transition-all ${
+                className={`flex items-center justify-center gap-2 px-4 py-3 sm:py-2 text-xs font-mono tracking-wider uppercase rounded-lg transition-all touch-manipulation active:scale-[0.98] ${
                   mode === 'TEXT_TO_BINARY'
                     ? 'bg-emerald-500 text-slate-950 font-bold shadow-[0_0_12px_rgba(16,185,129,0.3)]'
                     : 'text-emerald-400/60 hover:text-emerald-400'
@@ -210,7 +210,7 @@ export default function App() {
               </button>
               <button
                 onClick={() => { if (mode !== 'BINARY_TO_TEXT') toggleMode(); }}
-                className={`flex items-center justify-center gap-2 px-4 py-2 text-xs font-mono tracking-wider uppercase rounded-lg transition-all ${
+                className={`flex items-center justify-center gap-2 px-4 py-3 sm:py-2 text-xs font-mono tracking-wider uppercase rounded-lg transition-all touch-manipulation active:scale-[0.98] ${
                   mode === 'BINARY_TO_TEXT'
                     ? 'bg-emerald-500 text-slate-950 font-bold shadow-[0_0_12px_rgba(16,185,129,0.3)]'
                     : 'text-emerald-400/60 hover:text-emerald-400'
@@ -251,12 +251,12 @@ export default function App() {
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-[ping_1.5s_infinite] inline-block" />
               01 // Consigner des presets :
             </span>
-            <div className="flex gap-2 max-w-full overflow-x-auto">
+            <div className="flex gap-2 max-w-full overflow-x-auto pb-1 sm:pb-0 scrollbar-hide">
               {PRESET_SAMPLES.map((preset, index) => (
                 <button
                   key={index}
                   onClick={() => loadPreset(preset.text)}
-                  className="text-[10px] uppercase font-mono px-2.5 py-1 rounded border border-emerald-500/20 bg-emerald-500/5 hover:bg-emerald-500/20 text-emerald-400 transition-colors shrink-0"
+                  className="text-[10px] uppercase font-mono px-3 py-2 sm:px-2.5 sm:py-1 rounded border border-emerald-500/20 bg-emerald-500/5 hover:bg-emerald-500/20 text-emerald-400 transition-colors shrink-0 touch-manipulation active:bg-emerald-500/30"
                 >
                   {preset.name}
                 </button>
@@ -279,7 +279,7 @@ export default function App() {
                 <div className="flex items-center gap-1">
                   <button
                     onClick={() => copyToClipboard(mode === 'TEXT_TO_BINARY' ? textInput : binaryInput, 'input')}
-                    className="p-1.5 text-slate-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-colors border border-transparent hover:border-emerald-500/10 text-xs flex items-center justify-center"
+                    className="p-3 sm:p-1.5 text-slate-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-colors border border-transparent hover:border-emerald-500/10 text-xs flex items-center justify-center touch-manipulation"
                     title="Copier l'entrée"
                     disabled={mode === 'TEXT_TO_BINARY' ? !textInput : !binaryInput}
                   >
@@ -287,7 +287,7 @@ export default function App() {
                   </button>
                   <button
                     onClick={clearAll}
-                    className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-950/20 rounded-lg transition-colors border border-transparent hover:border-red-500/10 text-xs flex items-center justify-center"
+                    className="p-3 sm:p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-950/20 rounded-lg transition-colors border border-transparent hover:border-red-500/10 text-xs flex items-center justify-center touch-manipulation"
                     title="Vider la boîte de saisie"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -352,7 +352,7 @@ export default function App() {
                 </span>
                 <button
                   onClick={() => copyToClipboard(mode === 'TEXT_TO_BINARY' ? currentBinary : currentText, 'output')}
-                  className="p-1 px-2 text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 rounded transition-all border border-transparent hover:border-blue-500/10 text-[9px] uppercase font-mono flex items-center gap-1"
+                  className="p-2 sm:p-1 px-3 sm:px-2 text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 rounded transition-all border border-transparent hover:border-blue-500/10 text-[10px] sm:text-[9px] uppercase font-mono flex items-center gap-1 touch-manipulation"
                   title="Copier le résultat"
                   disabled={mode === 'TEXT_TO_BINARY' ? !currentBinary : !currentText}
                 >
@@ -441,7 +441,7 @@ export default function App() {
             {bytesDetails.length > 0 ? (
               <div 
                 id="bytes-matrix-grid" 
-                className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-2.5 max-h-52 overflow-y-auto pr-1"
+                className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3 sm:gap-2.5 max-h-64 sm:max-h-52 overflow-y-auto pr-1"
               >
                 {bytesDetails.map((item, index) => {
                   const isSelected = index === selectedByteIndex;
@@ -449,26 +449,26 @@ export default function App() {
                     <button
                       key={index}
                       onClick={() => setSelectedByteIndex(index)}
-                      className={`p-2.5 rounded-xl border text-left transition-all font-mono leading-tight ${
+                      className={`p-3 sm:p-2.5 rounded-xl border text-left transition-all font-mono leading-tight touch-manipulation active:scale-95 ${
                         isSelected
                           ? 'bg-emerald-500 text-black border-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.35)] font-bold'
                           : 'bg-black/45 border-emerald-500/10 hover:border-emerald-500/25 text-emerald-400/80 hover:text-emerald-300'
                       }`}
                     >
                       <div className="flex justify-between items-center mb-1">
-                        <span className={`text-[8px] font-mono uppercase tracking-wider ${isSelected ? 'text-black/60' : 'text-slate-500'}`}>
+                        <span className={`text-[9px] sm:text-[8px] font-mono uppercase tracking-wider ${isSelected ? 'text-black/60' : 'text-slate-500'}`}>
                           #{index + 1}
                         </span>
-                        <span className={`text-[9px] px-1 rounded uppercase font-bold font-mono ${
+                        <span className={`text-[10px] sm:text-[9px] px-1.5 sm:px-1 rounded uppercase font-bold font-mono ${
                           isSelected ? 'bg-black/20 text-black border-none' : 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/25'
                         }`}>
                           {item.char.charAt(0) === ' ' ? '␣' : item.char.charAt(0)}
                         </span>
                       </div>
-                      <div className="text-[10px] tracking-tight text-center truncate select-all selection:bg-slate-300/30">
+                      <div className="text-[11px] sm:text-[10px] tracking-tight text-center truncate select-all selection:bg-slate-300/30">
                         {item.binary}
                       </div>
-                      <div className={`flex justify-between text-[8px] font-mono mt-1 ${isSelected ? 'text-black/60' : 'text-slate-500'}`}>
+                      <div className={`flex justify-between text-[9px] sm:text-[8px] font-mono mt-1 ${isSelected ? 'text-black/60' : 'text-slate-500'}`}>
                         <span>D:{item.decimal}</span>
                         <span>H:{item.hex}</span>
                       </div>
