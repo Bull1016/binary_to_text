@@ -1,0 +1,6 @@
+{
+  "name": "Convertisseur Binaire",
+  "description": "Un outil intuitif et moderne pour convertir du texte en binaire et du binaire en texte avec des fonctionnalités d'analyse et d'apprentissage.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
