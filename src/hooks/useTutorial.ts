@@ -78,6 +78,15 @@ export const useTutorial = () => {
           }
         },
         {
+          element: '#suggestion-btn',
+          popover: {
+            title: 'Suggestions & Bugs',
+            description: 'Un problème ou une idée d\'amélioration ? Envoyez-nous vos retours directement ici.',
+            side: "bottom",
+            align: isMobile ? 'center' : 'end'
+          }
+        },
+        {
           element: '#start-tutorial-btn',
           popover: {
             title: 'Besoin d\'aide ?',

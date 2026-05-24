@@ -13,7 +13,12 @@ import {
   Flame,
   HelpCircle,
   Lightbulb,
-  CornerDownRight
+  CornerDownRight,
+  MessageSquare,
+  Lock,
+  LogOut,
+  ShieldCheck,
+  RefreshCw
 } from 'lucide-react';
 
 import { ConversionMode, BinarySeparator, ByteRepresentation } from './types';
@@ -29,6 +34,14 @@ import { InteractiveByte } from './components/InteractiveByte';
 import { TutorialCard } from './components/TutorialCard';
 import { BinaryStats } from './components/BinaryStats';
 import { useTutorial } from './hooks/useTutorial';
+import { SuggestionModal } from './components/SuggestionModal';
+
+interface Suggestion {
+  id: number;
+  type: 'suggestion' | 'bug';
+  description: string;
+  createdAt: string;
+}
 
 export default function App() {
   const { startTutorial } = useTutorial();
@@ -41,6 +54,15 @@ export default function App() {
 
   const [selectedByteIndex, setSelectedByteIndex] = useState<number>(0);
   const [copiedType, setCopiedType] = useState<'input' | 'output' | null>(null);
+
+  // New states for suggestions and admin
+  const [isSuggestionModalOpen, setIsSuggestionModalOpen] = useState(false);
+  const [showSecretLink, setShowSecretLink] = useState(false);
+  const [showLoginButton, setShowLoginButton] = useState(false);
+  const [isAdminMode, setIsAdminMode] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
 
   // Derive conversions
   let currentText = "";
@@ -62,6 +84,39 @@ export default function App() {
 
   // Generate detailed breakdown of bytes
   const bytesDetails = getBytesDetails(currentBytes);
+
+  // Check for secret code "Binaire d'Or 🌟"
+  useEffect(() => {
+    if (currentText === "Binaire d'Or 🌟") {
+      setShowSecretLink(true);
+    }
+  }, [currentText]);
+
+  // Fetch suggestions when admin mode and authenticated
+  useEffect(() => {
+    if (isAdminMode && isAuthenticated) {
+      fetchSuggestions();
+    }
+  }, [isAdminMode, isAuthenticated]);
+
+  const fetchSuggestions = async () => {
+    setIsLoadingSuggestions(true);
+    try {
+      const response = await fetch('/api/suggestions', {
+        headers: {
+          'Authorization': 'Bearer mock-google-token'
+        }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setSuggestions(data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch suggestions", err);
+    } finally {
+      setIsLoadingSuggestions(false);
+    }
+  };
 
   // Handle bit-toggling on specific index
   const handleByteChange = (newBinaryByteStr: string) => {
@@ -135,11 +190,110 @@ export default function App() {
     setSelectedByteIndex(0);
   };
 
+  // Mock Login with Google
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setIsAdminMode(false);
+  };
+
   // Get active byte string for interactive editor
   const activeByteData = bytesDetails[selectedByteIndex] || {
     binary: "00000000",
     char: "."
   };
+
+  if (isAdminMode && isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col font-mono overflow-x-hidden selection:bg-emerald-500/30 selection:text-emerald-200">
+        <header className="h-16 border-b border-emerald-500/20 flex items-center justify-between px-6 bg-black/40 backdrop-blur-md relative z-10">
+          <div className="flex items-center gap-3">
+            <div className="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.6)] animate-pulse" />
+            <h1 className="text-sm font-bold tracking-[0.2em] uppercase text-blue-400 flex items-center gap-2">
+              ADMIN_DASHBOARD v1.0.0
+              <span className="text-[9px] lowercase bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded border border-blue-500/20 uppercase tracking-normal">
+                SECURE_MODE
+              </span>
+            </h1>
+          </div>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={fetchSuggestions}
+              className="p-2 text-slate-400 hover:text-blue-400 transition-colors"
+              title="Rafraîchir"
+            >
+              <RefreshCw className={`w-4 h-4 ${isLoadingSuggestions ? 'animate-spin' : ''}`} />
+            </button>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition-all text-[10px] font-bold uppercase tracking-wider"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              Quitter
+            </button>
+          </div>
+        </header>
+
+        <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-8 relative z-10">
+          <div className="bg-black/60 border border-blue-500/20 rounded-2xl p-6 shadow-lg">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="text-xl font-bold text-white mb-1 flex items-center gap-2">
+                  <MessageSquare className="w-5 h-5 text-blue-400" />
+                  Suggestions & Bugs
+                </h2>
+                <p className="text-xs text-slate-500 uppercase tracking-widest">
+                  Liste des retours utilisateurs collectés
+                </p>
+              </div>
+              <div className="text-right">
+                <span className="text-[10px] text-slate-500 uppercase block mb-1">Total Entrées</span>
+                <span className="text-2xl font-bold text-blue-400">{suggestions.length}</span>
+              </div>
+            </div>
+
+            {isLoadingSuggestions ? (
+              <div className="flex flex-col items-center justify-center py-20 gap-4">
+                <div className="w-10 h-10 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
+                <span className="text-xs text-blue-400 animate-pulse uppercase tracking-widest">Récupération des données...</span>
+              </div>
+            ) : suggestions.length === 0 ? (
+              <div className="text-center py-20 border border-dashed border-blue-500/20 rounded-xl">
+                <p className="text-slate-500 text-sm">Aucun retour utilisateur pour le moment.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {suggestions.map((s) => (
+                  <div key={s.id} className="bg-slate-950/50 border border-blue-500/10 rounded-xl p-4 hover:border-blue-500/30 transition-all group">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className={`text-[10px] px-2 py-0.5 rounded font-bold uppercase ${
+                        s.type === 'bug' ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                      }`}>
+                        {s.type}
+                      </span>
+                      <span className="text-[10px] text-slate-500 font-mono">
+                        {new Date(s.createdAt).toLocaleString('fr-FR')}
+                      </span>
+                    </div>
+                    <p className="text-sm text-slate-300 leading-relaxed group-hover:text-white transition-colors">
+                      {s.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </main>
+
+        <footer className="p-6 border-t border-blue-500/20 text-center">
+          <span className="text-[10px] text-blue-500/40 uppercase tracking-[0.3em]">SECURED_STORAGE_V1 // INTUITION_OS</span>
+        </footer>
+      </div>
+    );
+  }
 
   return (
     <div id="main-app-container" className="min-h-screen bg-[#020617] text-slate-100 flex flex-col font-mono overflow-x-hidden selection:bg-emerald-500/30 selection:text-emerald-200">
@@ -161,7 +315,17 @@ export default function App() {
           </h1>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <button
+            id="suggestion-btn"
+            onClick={() => setIsSuggestionModalOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 hover:bg-blue-500/20 transition-all text-[10px] font-bold uppercase tracking-wider"
+            title="Envoyer une suggestion"
+          >
+            <MessageSquare className="w-3.5 h-3.5" />
+            Suggestion
+          </button>
+
           <button
             id="start-tutorial-btn"
             onClick={startTutorial}
@@ -185,6 +349,43 @@ export default function App() {
           </div>
         </div>
       </header>
+
+      {/* Login Overlay if showLoginButton is true and not authenticated */}
+      {showLoginButton && !isAuthenticated && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="w-full max-w-sm bg-[#05050a] border border-blue-500/30 rounded-2xl p-8 text-center shadow-[0_0_50px_rgba(59,130,246,0.1)]"
+          >
+            <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-blue-500/20">
+              <Lock className="w-8 h-8 text-blue-400" />
+            </div>
+            <h2 className="text-xl font-bold text-white mb-2 uppercase tracking-widest">Accès Restreint</h2>
+            <p className="text-xs text-slate-500 mb-8 leading-relaxed uppercase">
+              Authentification requise pour accéder au registre des suggestions.
+            </p>
+            <button
+              onClick={handleLogin}
+              className="w-full py-4 bg-white text-black font-bold uppercase tracking-widest rounded-xl flex items-center justify-center gap-3 hover:bg-slate-200 transition-all active:scale-[0.98]"
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 12-5.38z" fill="#EA4335" />
+              </svg>
+              Login with Google
+            </button>
+            <button
+              onClick={() => setShowLoginButton(false)}
+              className="mt-6 text-[10px] text-slate-500 hover:text-slate-300 uppercase tracking-widest transition-colors"
+            >
+              Annuler
+            </button>
+          </motion.div>
+        </div>
+      )}
 
       {/* Main Content Layout */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-6 md:py-8 grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-10">
@@ -522,9 +723,19 @@ export default function App() {
         
         <div className="flex-1 flex flex-col justify-center items-center text-center">
           <div className="text-lg font-bold tracking-[0.4em] text-white">INTUITION_OS Terminal</div>
-          <p className="text-[9px] text-slate-500 max-w-md uppercase mt-1">
-            Moteur de décodage et filtre binaire en temps réel. Aucun registre n'est stocké à l'extérieur. Conception sans latence.
-          </p>
+          <div className="flex flex-col items-center mt-1">
+            <p className="text-[9px] text-slate-500 max-w-md uppercase">
+              Moteur de décodage et filtre binaire en temps réel. Aucun registre n'est stocké à l'extérieur. Conception sans latence.
+            </p>
+            {showSecretLink && (
+              <button
+                onClick={() => setShowLoginButton(true)}
+                className="mt-2 text-[10px] text-emerald-500 hover:text-emerald-400 font-bold uppercase tracking-[0.2em] animate-pulse"
+              >
+                BULL16
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="w-full md:w-1/4 flex flex-col justify-between items-end gap-3">
@@ -543,12 +754,27 @@ export default function App() {
             </div>
           </div>
           <div className="flex gap-1.5">
+            {isAuthenticated && (
+              <button
+                onClick={() => setIsAdminMode(true)}
+                className="flex items-center gap-1 text-[9px] text-blue-400 hover:text-blue-300 mr-2 uppercase tracking-widest font-bold"
+              >
+                <ShieldCheck className="w-3 h-3" />
+                Accès Sécurisé
+              </button>
+            )}
             <div className="w-2 h-2 bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.5)]"></div>
             <div className="w-2 h-2 bg-emerald-500/40"></div>
             <div className="w-2 h-2 bg-emerald-500/10"></div>
           </div>
         </div>
       </footer>
+
+      {/* Suggestion Modal */}
+      <SuggestionModal
+        isOpen={isSuggestionModalOpen}
+        onClose={() => setIsSuggestionModalOpen(false)}
+      />
     </div>
   );
 }

@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1779656209518,
+    "type": "bug",
+    "description": "Ceci est un test de bug automatique.",
+    "createdAt": "2026-05-24T20:56:49.518Z"
+  },
+  {
+    "id": 1779656366503,
+    "type": "bug",
+    "description": "Ceci est un test de bug automatique.",
+    "createdAt": "2026-05-24T20:59:26.503Z"
+  }
+]
