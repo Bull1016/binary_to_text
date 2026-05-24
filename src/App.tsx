@@ -28,8 +28,10 @@ import {
 import { InteractiveByte } from './components/InteractiveByte';
 import { TutorialCard } from './components/TutorialCard';
 import { BinaryStats } from './components/BinaryStats';
+import { useTutorial } from './hooks/useTutorial';
 
 export default function App() {
+  const { startTutorial } = useTutorial();
   const [mode, setMode] = useState<ConversionMode>('TEXT_TO_BINARY');
   const [separator, setSeparator] = useState<BinarySeparator>(' ');
   
@@ -137,7 +139,9 @@ export default function App() {
   const activeByteData = bytesDetails[selectedByteIndex] || {
     binary: "00000000",
     char: "."
-  };  return (
+  };
+
+  return (
     <div id="main-app-container" className="min-h-screen bg-[#020617] text-slate-100 flex flex-col font-mono overflow-x-hidden selection:bg-emerald-500/30 selection:text-emerald-200">
       {/* Background Ambient Glows */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -157,16 +161,28 @@ export default function App() {
           </h1>
         </div>
 
-        {/* Console latency telemetry status */}
-        <div className="flex flex-wrap items-center justify-center gap-4 text-[9px] tracking-[0.15em] opacity-80 uppercase text-emerald-500/70 font-mono">
-          <span>Conn: <strong className="text-emerald-400">Secure</strong></span>
-          <span className="hidden sm:inline">•</span>
-          <span>Buffer: <strong className="text-emerald-400">Optimized</strong></span>
-          <span className="hidden sm:inline">•</span>
-          <span>Lat: <strong className="text-emerald-400">0.2ms</strong></span>
-          <span className="px-2 py-0.5 border border-emerald-500/30 rounded bg-emerald-950/20 text-emerald-300">
-            UTF-8 / ASCII
-          </span>
+        <div className="flex items-center gap-4">
+          <button
+            id="start-tutorial-btn"
+            onClick={startTutorial}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 transition-all text-[10px] font-bold uppercase tracking-wider"
+            title="Démarrer le tutoriel"
+          >
+            <HelpCircle className="w-3.5 h-3.5" />
+            Aide
+          </button>
+
+          {/* Console latency telemetry status */}
+          <div className="hidden md:flex flex-wrap items-center justify-center gap-4 text-[9px] tracking-[0.15em] opacity-80 uppercase text-emerald-500/70 font-mono">
+            <span>Conn: <strong className="text-emerald-400">Secure</strong></span>
+            <span className="hidden sm:inline">•</span>
+            <span>Buffer: <strong className="text-emerald-400">Optimized</strong></span>
+            <span className="hidden sm:inline">•</span>
+            <span>Lat: <strong className="text-emerald-400">0.2ms</strong></span>
+            <span className="px-2 py-0.5 border border-emerald-500/30 rounded bg-emerald-950/20 text-emerald-300">
+              UTF-8 / ASCII
+            </span>
+          </div>
         </div>
       </header>
 
@@ -177,7 +193,7 @@ export default function App() {
         <section className="lg:col-span-12 xl:col-span-7 flex flex-col gap-6">
           
           {/* Mode Switcher Block */}
-          <div className="bg-black/60 p-2.5 rounded-2xl border border-emerald-500/20 backdrop-blur-sm flex flex-col sm:flex-row gap-4 justify-between items-stretch sm:items-center">
+          <div id="mode-switcher" className="bg-black/60 p-2.5 rounded-2xl border border-emerald-500/20 backdrop-blur-sm flex flex-col sm:flex-row gap-4 justify-between items-stretch sm:items-center">
             
             {/* Primary Swap Tabs */}
             <div className="grid grid-cols-2 gap-1.5 bg-slate-950/80 p-1 rounded-xl border border-emerald-500/10">
@@ -230,7 +246,7 @@ export default function App() {
           </div>
 
           {/* Quick Preset Buttons Bar */}
-          <div className="bg-black/40 border border-emerald-500/10 p-3 rounded-xl flex items-center justify-between flex-wrap gap-3">
+          <div id="presets-bar" className="bg-black/40 border border-emerald-500/10 p-3 rounded-xl flex items-center justify-between flex-wrap gap-3">
             <span className="text-[10px] text-emerald-500/65 font-bold uppercase tracking-widest flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-[ping_1.5s_infinite] inline-block" />
               01 // Consigner des presets :
@@ -411,7 +427,7 @@ export default function App() {
           </AnimatePresence>
 
           {/* Interactive Visual Byte Chain Matrix */}
-          <div className="bg-black/60 border border-emerald-500/20 rounded-2xl p-5 shadow-lg flex flex-col gap-4">
+          <div id="byte-matrix" className="bg-black/60 border border-emerald-500/20 rounded-2xl p-5 shadow-lg flex flex-col gap-4">
             <div>
               <h3 className="text-xs font-mono uppercase font-semibold text-emerald-400 tracking-wider flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse inline-block" />
