@@ -14,6 +14,7 @@ Une application web interactive au style terminal permettant de convertir du tex
 - **Presets d'exemples** : Chargez des textes prédéfinis pour explorer rapidement l'outil
 - **Détection d'erreurs** : Signalement des séquences binaires invalides lors du décodage
 - **Copie en un clic** : Copiez l'entrée ou la sortie dans le presse-papiers
+- **Système de retours** : Envoyez vos suggestions d'améliorations ou signalez des bugs directement via l'interface
 - **Interface responsive** : Fonctionne sur mobile, tablette et desktop
 
 ---
@@ -29,6 +30,7 @@ Une application web interactive au style terminal permettant de convertir du tex
 | **Lucide React** | Icônes |
 | **@google/genai** | SDK Gemini AI |
 | **Express** | Serveur backend |
+| **Node.js** | Environnement d'exécution |
 
 ---
 
@@ -56,6 +58,11 @@ Une application web interactive au style terminal permettant de convertir du tex
    npm run dev
    ```
    L'application est disponible sur [http://localhost:3000](http://localhost:3000)
+
+4. **Lancer le serveur de données (pour les suggestions) :**
+   ```bash
+   node --import tsx server.ts
+   ```
 
 ---
 
